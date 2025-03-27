@@ -1,0 +1,60 @@
+import java.util.*;
+
+public class Main {
+    static class Point {
+        int x, y;
+
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    static int crossProduct(Point a, Point b, Point c) {
+        return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+    }
+
+    static List<Point> convexHull(Point[] points) {
+        if (points.length < 3) return Arrays.asList(points);
+        Arrays.sort(points, (p1, p2) -> p1.x == p2.x ? p1.y - p2.y : p1.x - p2.x);
+        List<Point> hull = new ArrayList<>();
+        for (Point p : points) {
+            while (hull.size() >= 2 && crossProduct(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
+                hull.remove(hull.size() - 1);
+            }
+            hull.add(p);
+        }
+
+        int t = hull.size() + 1;
+        for (int i = points.length - 1; i >= 0; i--) {
+            Point p = points[i];
+            while (hull.size() >= t && crossProduct(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
+                hull.remove(hull.size() - 1);
+            }
+            hull.add(p);
+        }
+
+        hull.remove(hull.size() - 1); 
+        return hull;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(); 
+        Point[] stations = new Point[n];
+
+        for (int i = 0; i < n; i++) {
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            stations[i] = new Point(x, y);
+        }
+
+        List<Point> alarmStations = convexHull(stations);
+
+        for (Point p : alarmStations) {
+            System.out.println(p.x + " " + p.y);
+        }
+
+        sc.close();
+    }
+}
