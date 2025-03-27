@@ -1,0 +1,20 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double r = sc.nextDouble(); 
+        sc.close();
+
+        double pi = 0;
+        int sign = 1;
+
+        for (int i = 1; i <= 10000; i += 2) { 
+            pi += sign * 1.0 / i;
+            sign = -sign;
+        }
+        pi *= 4; // Nhân 4 để được π
+
+        System.out.println(pi * r * r); 
+    }
+}
